@@ -13,6 +13,6 @@ router.use('/users', routerUser);
 logger.info("Route initialized: /users");
 
 router.use('/texts', routerText);
-logger.info("Route initialized: /users");
+logger.info("Route initialized: /texts");
 
 export default router;
