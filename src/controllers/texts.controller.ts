@@ -26,8 +26,12 @@ export const createTextController = async (req: Request, res: Response) => {
         const newText = req.body;
         const createdText = await createText(newText);
         res.status(201).json(createdText);
-    } catch (error) {
-        res.status(500).json({ message: "Server error, please try again later" });
+    } catch (error: any) {
+        if (error.code == 11000) {
+            res.status(400).json({ message: "Duplicated key" });
+        } else {
+            res.status(500).json({ message: "Server error, please try again later" });
+        }
     }
 };
 

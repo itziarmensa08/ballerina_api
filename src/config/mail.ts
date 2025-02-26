@@ -18,13 +18,13 @@ export const transporter = nodemailer.createTransport({
 /**
  * Verify transporter connection
  */
-/* transporter.verify((error, success) => {
+transporter.verify((error, success) => {
     if (error) {
         logger.error('Error configuring email transporter:', error);
     } else {
         logger.info('Ready to send emails');
     }
-}); */
+});
 
 /**
  * Send a validation email to the user
