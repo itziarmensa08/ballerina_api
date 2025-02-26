@@ -40,8 +40,19 @@ export const createTextController = async (req: Request, res: Response) => {
  */
 export const updateTextController = async (req: Request, res: Response) => {
     try {
-        const { key, lang, value } = req.body;
-        const updatedText = await updateText(key, lang, value);
+        const { key, value } = req.body;
+
+        if (!key || !value) {
+            res.status(400).json({ message: "Key and value are required" });
+            return;
+        }
+        const updatedText = await updateText(key, value);
+
+        if (!updatedText) {
+            res.status(404).json({ message: "Text not found" });
+            return;
+        }
+
         res.json(updatedText);
     } catch (error) {
         res.status(500).json({ message: "Server error, please try again later" });

@@ -28,10 +28,10 @@ export const createText = async (newText: Text): Promise<Text> => {
  * @param lang - Language code (ca, es, en_US)
  * @param value - New text value
  */
-export const updateText = async (key: string, lang: string, value: string): Promise<Text | null> => {
+export const updateText = async (key: string, newText: Text): Promise<Text | null> => {
     return await TextModel.findOneAndUpdate(
         { key },
-        { $set: { [`value.${lang}`]: value } },
+        { $set: newText },
         { new: true, upsert: true }
     );
 };
