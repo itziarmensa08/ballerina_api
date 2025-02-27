@@ -1,6 +1,12 @@
 services:
   mongo:
       image: mongo:7.0
+      volumes:
+        - mongo-data:/data/db
       ports:
         - 27018:27017
       restart: always
+
+volumes:
+  mongo-data:
+    driver: local

@@ -77,8 +77,9 @@ export const refreshTokenService = async (refreshToken: string) => {
 
     // Generate new access token
     const newAccessToken = generateAccessToken(user._id.toString(), user.role);
+    const newRefreshToken = generateRefreshToken(user._id.toString());
 
-    return { accessToken: newAccessToken };
+    return { accessToken: newAccessToken, refreshToken: newRefreshToken };
 };
 
 /**
