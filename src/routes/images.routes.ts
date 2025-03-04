@@ -9,7 +9,7 @@ const router = Router();
 router.get("/", authenticateJWT, authorizeAdmin, getAllImagesController);
 router.get("/:id", authenticateJWT, authorizeAdmin, getImageController);
 router.post("/", authenticateJWT, authorizeAdmin, createImageController);
-router.put("/", authenticateJWT, authorizeAdmin, updateImageController);
+router.put("/:id", authenticateJWT, authorizeAdmin, updateImageController);
 router.delete("/:key", authenticateJWT, authorizeAdmin, deleteImageController);
 
 export { router as routerImages};
