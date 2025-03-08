@@ -45,15 +45,15 @@ export const getImageController = async (req: Request, res: Response) => {
  */
 export const createImageController = async (req: Request, res: Response) => {
     try {
-        const { key, images } = req.body;
+        const { key, image } = req.body;
 
         // Validación de datos de entrada
-        if (!key || !Array.isArray(images) || images.length === 0) {
-            res.status(400).json({ message: "Key and at least one image are required" });
+        if (!key || !image) {
+            res.status(400).json({ message: "Key and one image are required" });
             return;
         }
 
-        const createdImage = await createImage({ key, images });
+        const createdImage = await createImage(key, image);
         res.status(201).json(createdImage);
     } catch (error: any) {
         if (error.code === 11000) {

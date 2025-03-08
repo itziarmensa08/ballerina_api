@@ -1,4 +1,4 @@
 export interface Image {
     key: string;
-    images: string[];
+    image: string;
 }
