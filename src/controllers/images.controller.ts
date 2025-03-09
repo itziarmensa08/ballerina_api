@@ -45,7 +45,8 @@ export const getImageController = async (req: Request, res: Response) => {
  */
 export const createImageController = async (req: Request, res: Response) => {
     try {
-        const { key, image } = req.body;
+        const { key } = req.body;
+        const image = req.file;
 
         // Validación de datos de entrada
         if (!key || !image) {
@@ -59,6 +60,7 @@ export const createImageController = async (req: Request, res: Response) => {
         if (error.code === 11000) {
             res.status(400).json({ message: "Duplicated key" });
         } else {
+            console.log(error)
             res.status(500).json({ message: "Server error, please try again later" });
         }
     }

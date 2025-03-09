@@ -3,6 +3,7 @@ import logger from './config/logger';
 import { dbConnect } from './config/mongo';
 import router from './routes/routes';
 import cors from 'cors';
+import "./config/cloudinary"; 
 
 process.loadEnvFile();
 
