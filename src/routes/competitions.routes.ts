@@ -8,8 +8,8 @@ const router = Router();
 const upload = multer();
 
 // Routes for texts CRUD operations
-router.get("/", authenticateJWT, authorizeAdmin, getAllCompetitionsController);
-router.get("/:id", getCompetitionController);
+router.get("/", getAllCompetitionsController);
+router.get("/:id", authenticateJWT, authorizeAdmin, getCompetitionController);
 router.post("/", authenticateJWT, authorizeAdmin, upload.array('images', 10), createCompetitionController);
 router.put("/:id", authenticateJWT, authorizeAdmin, upload.array('images', 10), updateCompetitionController);
 router.delete("/:id", authenticateJWT, authorizeAdmin, deleteCompetitionController);

@@ -10,7 +10,7 @@ const upload = multer();
 // Routes for texts CRUD operations
 router.get("/", authenticateJWT, authorizeAdmin, getAllImagesController);
 router.get("/:id", authenticateJWT, authorizeAdmin, getImageController);
-router.get("/key/:key", authenticateJWT, authorizeAdmin, getImageByKeyController);
+router.get("/key/:key", getImageByKeyController);
 router.post("/", authenticateJWT, authorizeAdmin, upload.single("image"), createImageController);
 router.put("/:id", authenticateJWT, authorizeAdmin, upload.single("image"), updateImageController);
 router.delete("/:id", authenticateJWT, authorizeAdmin, deleteImageController);
