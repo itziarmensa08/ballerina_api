@@ -16,3 +16,22 @@ logger.info("Cloudinary configurado con éxito:", {
 });
 
 export default cloudinary;
+
+/**
+ * Subir una imagen a Cloudinary
+ */
+export const uploadToCloudinary = async (fileBuffer: Buffer, folder: string): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    cloudinary.uploader.upload_stream({ resource_type: "image", folder: folder }, (error, result) => {
+      if (error) {
+        console.error("Error subiendo a Cloudinary:", error);
+        return reject(error);
+      }
+      if (result?.secure_url) {
+        return resolve(result.secure_url);
+      } else {
+        return reject("No se recibió una URL de Cloudinary");
+      }
+    }).end(fileBuffer);
+  });
+};

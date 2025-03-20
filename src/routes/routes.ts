@@ -4,6 +4,7 @@ import { routerAuth } from "./auth.routes";
 import { routerUser } from "./users.routes";
 import { routerText } from "./texts.routes";
 import { routerImages } from "./images.routes";
+import { routerCompetitions } from "./competitions.routes";
 
 const router = Router();
 
@@ -18,5 +19,8 @@ logger.info("Route initialized: /texts");
 
 router.use('/images', routerImages);
 logger.info("Route initialized: /images");
+
+router.use('/competitions', routerCompetitions);
+logger.info("Route initialized: /competitions");
 
 export default router;

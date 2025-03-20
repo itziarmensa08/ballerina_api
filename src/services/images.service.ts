@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import { Image } from "../interfaces/image.interface";
 import { ImageModel } from "../models/image.model";
 import { v2 as cloudinary } from "cloudinary";
+import { uploadToCloudinary } from "../config/cloudinary";
 
 /**
  * Get all images
@@ -20,22 +21,13 @@ export const getImageById = async (id: string): Promise<Image | null> => {
 };
 
 /**
- * Subir una imagen a Cloudinary
+ * Get an image by key
+ * @param key - Image's Key
  */
-const uploadToCloudinary = async (fileBuffer: Buffer): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    cloudinary.uploader.upload_stream({ resource_type: "image", folder: "images" }, (error, result) => {
-      if (error) {
-        console.error("Error subiendo a Cloudinary:", error);
-        return reject(error);
-      }
-      if (result?.secure_url) {
-        return resolve(result.secure_url);
-      } else {
-        return reject("No se recibió una URL de Cloudinary");
-      }
-    }).end(fileBuffer);
-  });
+export const getImageByKey = async (key: string): Promise<String | null> => {
+  let image: Image | null = await ImageModel.findOne({ key });
+  if (!image) return null;
+  return image.image;
 };
 
 /**
@@ -45,7 +37,7 @@ export const createImage = async (key: string, file: Express.Multer.File): Promi
   if (!file) throw new Error("No se han recibido ninguna imágen");
 
   // Subir todas las imágenes a Cloudinary
-  const uploadedImage = await uploadToCloudinary(file.buffer);
+  const uploadedImage = await uploadToCloudinary(file.buffer, 'images');
 
   // Guardar en MongoDB
   const newImage = new ImageModel({
@@ -61,9 +53,14 @@ export const createImage = async (key: string, file: Express.Multer.File): Promi
  * @param id - Image's ID
  * @param updateData - Data to update
  */
-export const updateImageById = async (id: string, updateData: Partial<Image>): Promise<Image | null> => {
+export const updateImageById = async (id: string, file: Express.Multer.File): Promise<Image | null> => {
   if (!mongoose.isValidObjectId(id)) throw new Error("INVALID_ID");
-  return await ImageModel.findByIdAndUpdate(id, updateData, { new: true, runValidators: true });
+  if (!file) throw new Error("No se han recibido ninguna imágen");
+
+  // Subir todas las imágenes a Cloudinary
+  const uploadedImage = await uploadToCloudinary(file.buffer, 'images');
+  
+  return await ImageModel.findByIdAndUpdate(id, {image: uploadedImage}, { new: true, runValidators: true });
 };
 
 /**

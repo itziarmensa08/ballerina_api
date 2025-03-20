@@ -4,6 +4,7 @@ import {
     deleteImageById, 
     getAllImages, 
     getImageById, 
+    getImageByKey, 
     updateImageById 
 } from "../services/images.service";
 
@@ -41,6 +42,23 @@ export const getImageController = async (req: Request, res: Response) => {
 };
 
 /**
+ * Controller to get an image by Key
+ */
+export const getImageByKeyController = async (req: Request, res: Response) => {
+    try {
+        const { key } = req.params;
+        const image = await getImageByKey(key);
+        if (!image) {
+            res.status(404).json({ message: "Image not found" });
+            return;
+        }
+        res.json(image);
+    } catch (error: any) {
+        res.status(500).json({ message: "Server error, please try again later" });
+    }
+};
+
+/**
  * Controller to create a new image
  */
 export const createImageController = async (req: Request, res: Response) => {
@@ -60,7 +78,6 @@ export const createImageController = async (req: Request, res: Response) => {
         if (error.code === 11000) {
             res.status(400).json({ message: "Duplicated key" });
         } else {
-            console.log(error)
             res.status(500).json({ message: "Server error, please try again later" });
         }
     }
@@ -72,14 +89,14 @@ export const createImageController = async (req: Request, res: Response) => {
 export const updateImageController = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
-        const updateData = req.body;
+        const image = req.file;
 
-        if (!updateData || Object.keys(updateData).length === 0) {
-            res.status(400).json({ message: "At least one field is required for update" });
+        if (!image) {
+            res.status(400).json({ message: "Image is required for update" });
             return;
         }
 
-        const updatedImage = await updateImageById(id, updateData);
+        const updatedImage = await updateImageById(id, image);
         if (!updatedImage) {
             res.status(404).json({ message: "Image not found" });
             return;
