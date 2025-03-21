@@ -3,6 +3,7 @@ import { Image } from "../interfaces/image.interface";
 import { ImageModel } from "../models/image.model";
 import { v2 as cloudinary } from "cloudinary";
 import { uploadToCloudinary } from "../config/cloudinary";
+import { maybeCompressFile } from "../utils/compress.utils";
 
 /**
  * Get all images
@@ -36,8 +37,10 @@ export const getImageByKey = async (key: string): Promise<String | null> => {
 export const createImage = async (key: string, file: Express.Multer.File): Promise<Image> => {
   if (!file) throw new Error("No se han recibido ninguna imágen");
 
+  const compressedBuffer = await maybeCompressFile(file);
+
   // Subir todas las imágenes a Cloudinary
-  const uploadedImage = await uploadToCloudinary(file.buffer, 'images');
+  const uploadedImage = await uploadToCloudinary(compressedBuffer, 'images');
 
   // Guardar en MongoDB
   const newImage = new ImageModel({
@@ -57,8 +60,10 @@ export const updateImageById = async (id: string, file: Express.Multer.File): Pr
   if (!mongoose.isValidObjectId(id)) throw new Error("INVALID_ID");
   if (!file) throw new Error("No se han recibido ninguna imágen");
 
+  const compressedBuffer = await maybeCompressFile(file);
+
   // Subir todas las imágenes a Cloudinary
-  const uploadedImage = await uploadToCloudinary(file.buffer, 'images');
+  const uploadedImage = await uploadToCloudinary(compressedBuffer, 'images');
   
   return await ImageModel.findByIdAndUpdate(id, {image: uploadedImage}, { new: true, runValidators: true });
 };

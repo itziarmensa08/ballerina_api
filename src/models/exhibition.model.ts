@@ -12,7 +12,8 @@ const exhibitionSchema = new Schema<IExhibition>({
         es: { type: String, required: true }, 
         en: { type: String, required: true } 
     },
-    images: { type: [String], required: true, default: [] }
+    images: { type: [String], required: true, default: [] },
+    videos: { type: [String], default: [] }
 }, {
     timestamps: true
 });

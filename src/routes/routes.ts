@@ -5,6 +5,7 @@ import { routerUser } from "./users.routes";
 import { routerText } from "./texts.routes";
 import { routerImages } from "./images.routes";
 import { routerCompetitions } from "./competitions.routes";
+import { routerExhibitions } from "./exhibitions.routes";
 
 const router = Router();
 
@@ -22,5 +23,8 @@ logger.info("Route initialized: /images");
 
 router.use('/competitions', routerCompetitions);
 logger.info("Route initialized: /competitions");
+
+router.use('/exhibitions', routerExhibitions);
+logger.info("Route initialized: /exhibitions");
 
 export default router;

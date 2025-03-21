@@ -1,36 +1,36 @@
 import { Request, Response } from "express";
 import { 
-    createCompetition, 
-    deleteCompetitionById, 
-    getAllCompetitions, 
-    getCompetitionById, 
-    updateCompetitionById 
-} from "../services/competitions.service";
+    createExhibition, 
+    deleteExhibitionById, 
+    getAllExhibitions, 
+    getExhibitionById, 
+    updateExhibitionById 
+} from "../services/exhibitions.service";
 
 /**
- * Controller to get all competitions
+ * Controller to get all exhibitions
  */
-export const getAllCompetitionsController = async (req: Request, res: Response) => {
+export const getAllExhibitionsController = async (req: Request, res: Response) => {
     try {
-        const competitions = await getAllCompetitions();
-        res.json(competitions);
+        const Exhibitions = await getAllExhibitions();
+        res.json(Exhibitions);
     } catch (error) {
         res.status(500).json({ message: "Server error, please try again later" });
     }
 };
 
 /**
- * Controller to get a competition by ID
+ * Controller to get a Exhibition by ID
  */
-export const getCompetitionController = async (req: Request, res: Response) => {
+export const getExhibitionController = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
-        const competition = await getCompetitionById(id);
-        if (!competition) {
-            res.status(404).json({ message: "Competition not found" });
+        const Exhibition = await getExhibitionById(id);
+        if (!Exhibition) {
+            res.status(404).json({ message: "Exhibition not found" });
             return;
         }
-        res.json(competition);
+        res.json(Exhibition);
     } catch (error: any) {
         if (error.message === "INVALID_ID") {
             res.status(400).json({ message: "Invalid ObjectId" });
@@ -41,52 +41,51 @@ export const getCompetitionController = async (req: Request, res: Response) => {
 };
 
 /**
- * Controller to create a new competition
+ * Controller to create a new Exhibition
  */
-export const createCompetitionController = async (req: Request, res: Response) => {
+export const createExhibitionController = async (req: Request, res: Response) => {
     try {
-        const { competition } = req.body;
-        const images = req.files;
+        const { exhibition } = req.body;
+        const files = req.files;
 
-        if (!competition || !Array.isArray(images) || images.length === 0) {
+        if (!exhibition || !Array.isArray(files) || files.length === 0) {
             res.status(400).json({ message: "Title, description, and at least one image are required" });
             return;
         }
 
-        const createdCompetition = await createCompetition(JSON.parse(competition), images);
-        res.status(201).json(createdCompetition);
+        const createdExhibition = await createExhibition(JSON.parse(exhibition), files);
+        res.status(201).json(createdExhibition);
     } catch (error: any) {
         res.status(500).json({ message: "Server error, please try again later" });
     }
 };
 
 /**
- * Controller to update a competition by ID
+ * Controller to update a Exhibition by ID
  */
-export const updateCompetitionController = async (req: Request, res: Response) => {
+export const updateExhibitionController = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
-        const { competition } = req.body;
-        let images = req.files;
+        const { exhibition } = req.body;
+        let files = req.files;
 
-        if (!competition) {
+        if (!exhibition) {
             res.status(400).json({ message: "Title or description required" });
             return;
         }
 
-        if (!Array.isArray(images) || images.length === 0) {
-            images = [];
+        if (!Array.isArray(files) || files.length === 0) {
+            files = [];
         }
 
-        const updatedCompetition = await updateCompetitionById(id, JSON.parse(competition), images);
-        if (!updatedCompetition) {
-            res.status(404).json({ message: "Competition not found" });
+        const updatedExhibition = await updateExhibitionById(id, JSON.parse(exhibition), files);
+        if (!updatedExhibition) {
+            res.status(404).json({ message: "Exhibition not found" });
             return;
         }
 
-        res.status(200).json(updatedCompetition);
+        res.status(200).json(updatedExhibition);
     } catch (error: any) {
-        console.log(error)
         if (error.message === "INVALID_ID") {
             res.status(400).json({ message: "Invalid ObjectId" });
         } else {
@@ -96,18 +95,18 @@ export const updateCompetitionController = async (req: Request, res: Response) =
 };
 
 /**
- * Controller to delete a competition by ID
+ * Controller to delete a Exhibition by ID
  */
-export const deleteCompetitionController = async (req: Request, res: Response) => {
+export const deleteExhibitionController = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
-        const competitionDeleted = await deleteCompetitionById(id);
-        if (!competitionDeleted) {
-            res.status(404).json({ message: "Competition not found" });
+        const ExhibitionDeleted = await deleteExhibitionById(id);
+        if (!ExhibitionDeleted) {
+            res.status(404).json({ message: "Exhibition not found" });
             return;
         }
 
-        res.status(200).json({ message: "Competition deleted successfully" });
+        res.status(200).json({ message: "Exhibition deleted successfully" });
     } catch (error: any) {
         if (error.message === "INVALID_ID") {
             res.status(400).json({ message: "Invalid ObjectId" });

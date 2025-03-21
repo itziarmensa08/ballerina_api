@@ -22,7 +22,7 @@ export default cloudinary;
  */
 export const uploadToCloudinary = async (fileBuffer: Buffer, folder: string): Promise<string> => {
   return new Promise((resolve, reject) => {
-    cloudinary.uploader.upload_stream({ resource_type: "image", folder: folder }, (error, result) => {
+    cloudinary.uploader.upload_stream({ resource_type: "auto", folder: folder }, (error, result) => {
       if (error) {
         console.error("Error subiendo a Cloudinary:", error);
         return reject(error);

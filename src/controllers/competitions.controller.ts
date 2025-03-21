@@ -87,7 +87,6 @@ export const updateCompetitionController = async (req: Request, res: Response) =
 
         res.status(200).json(updatedCompetition);
     } catch (error: any) {
-        console.log(error)
         if (error.message === "INVALID_ID") {
             res.status(400).json({ message: "Invalid ObjectId" });
         } else {

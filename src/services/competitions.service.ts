@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import { ICompetition } from "../interfaces/competition.interface";
 import { CompetitionModel } from "../models/competition.model";
 import { uploadToCloudinary } from "../config/cloudinary";
+import { maybeCompressFile } from "../utils/compress.utils";
 
 /**
  * Get all competitions
@@ -27,7 +28,8 @@ export const createCompetition = async (competitionData: Partial<ICompetition>, 
     if (!files) throw new Error("No se han recibido ninguna imágen");
     let listImages: string[] = [];
     for (let file of files) {
-        const uploadedImage = await uploadToCloudinary(file.buffer, 'images');
+        const compressedBuffer = await maybeCompressFile(file);
+        const uploadedImage = await uploadToCloudinary(compressedBuffer, 'images');
         listImages.push(uploadedImage);
     }
     const newCompetition = new CompetitionModel({
@@ -47,7 +49,8 @@ export const updateCompetitionById = async (id: string, competitionData: Partial
     if (!mongoose.isValidObjectId(id)) throw new Error("INVALID_ID");
     let listImages: string[] = [];
     for (let file of files) {
-        const uploadedImage = await uploadToCloudinary(file.buffer, 'images');
+        const compressedBuffer = await maybeCompressFile(file);
+        const uploadedImage = await uploadToCloudinary(compressedBuffer, 'images');
         listImages.push(uploadedImage);
     }
     const { _id, ...updateData } = competitionData; 

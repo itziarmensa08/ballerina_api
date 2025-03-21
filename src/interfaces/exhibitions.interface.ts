@@ -12,4 +12,5 @@ export interface IExhibition extends Document {
         en: string
     };
     images: string[];
+    videos: string[];
 }
