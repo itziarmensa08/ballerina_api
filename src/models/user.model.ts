@@ -2,6 +2,39 @@ import { Schema, model } from "mongoose";
 import bcrypt from "bcrypt";
 import { IUser } from "../interfaces/user.interface";
 
+const ParentInfoSchema = new Schema(
+    {
+        name: { type: String, required: true },
+        surname: { type: String, required: true },
+        telephone: { type: String },
+        email: { type: String },
+        relation: { type: String, enum: ["mother", "father", "tutor", "other"], required: true },
+        iban: { type: String, required: true },
+        iban_titularity: { type: String, required: true }
+    },
+    { _id: false }
+);
+
+const ScheduleSchema = new Schema(
+    {
+        day: { type: String, enum: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'], required: true },
+        startTime: { type: String, required: true },
+        endTime: { type: String, required: true }
+    },
+    { _id: false }
+);
+
+const ImageRightsSchema = new Schema(
+    {
+        authorizing_tutor: {
+        name: { type: String, required: true },
+        dni: { type: String, required: true }
+        },
+        authorized: { type: Boolean, required: true }
+    },
+    { _id: false }
+);
+
 const UserSchema = new Schema<IUser>(
     {
         name: { type: String, required: true },
@@ -10,15 +43,23 @@ const UserSchema = new Schema<IUser>(
         email: { type: String, required: true, unique: true },
         password: { type: String, required: true },
         validated: { type: Boolean, default: false, required: true },
-        role: { type: String, enum: ["admin", "user"], default: "user", required: true },
-        telephone: { type: Number },
+        role: { type: String, enum: ["admin", "user", "gimnast"], default: "user", required: true },
+        telephone: { type: String },
+        dni: { type: String },
+        catSalut: { type: String },
         dateBorn: { type: Date },
+        address: { type: String },
+        illness: { type: String },
+        level: { type: String, enum: ["base", "escolar", "federat"] },
         profileImage: { type: String },
+        schedule: [ScheduleSchema],
+        parents: [ParentInfoSchema],
+        imageRights: ImageRightsSchema,
         language: { type: String, enum: ["ca", "es", "en_US"], default: "es", required: true }
     },
     {
         timestamps: true,
-        versionKey: false,
+        versionKey: false
     }
 );
 
