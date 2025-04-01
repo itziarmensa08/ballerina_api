@@ -4,9 +4,8 @@ import { routerAuth } from "./auth.routes";
 import { routerUser } from "./users.routes";
 import { routerText } from "./texts.routes";
 import { routerImages } from "./images.routes";
-import { routerCompetitions } from "./competitions.routes";
-import { routerExhibitions } from "./exhibitions.routes";
 import { routerCategories } from "./categories.routes";
+import { routerContact } from "./contact.routes";
 
 const router = Router();
 
@@ -22,13 +21,10 @@ logger.info("Route initialized: /texts");
 router.use('/images', routerImages);
 logger.info("Route initialized: /images");
 
-router.use('/competitions', routerCompetitions);
-logger.info("Route initialized: /competitions");
-
-router.use('/exhibitions', routerExhibitions);
-logger.info("Route initialized: /exhibitions");
-
 router.use('/categories', routerCategories);
 logger.info("Route initialized: /categories");
+
+router.use('/contact', routerContact);
+logger.info("Route initialized: /contact");
 
 export default router;
