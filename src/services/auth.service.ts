@@ -13,7 +13,7 @@ export const registerUserService = async (userData: Partial<IUser>) => {
     const { username, email, password, ...otherData } = userData;
 
     // Check if the username or email already exists
-    const existingUser = await UserModel.findOne({ $or: [{ username }, { email }] });
+    const existingUser = await UserModel.findOne({ $or: [{ username }] });
     if (existingUser) throw new Error("ALREADY USER");
 
     // Hash the password automatically in the User model, so no need to hash it here

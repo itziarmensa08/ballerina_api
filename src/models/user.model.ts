@@ -6,11 +6,15 @@ const ParentInfoSchema = new Schema(
     {
         name: { type: String, required: true },
         surname: { type: String, required: true },
-        telephone: { type: String },
-        email: { type: String },
-        relation: { type: String, enum: ["mother", "father", "tutor", "other"], required: true },
+        telephone: { type: String }
+    },
+    { _id: false }
+);
+
+const BancInfoSchema = new Schema(
+    {
         iban: { type: String, required: true },
-        iban_titularity: { type: String, required: true }
+        titularity: { type: String }
     },
     { _id: false }
 );
@@ -27,8 +31,8 @@ const ScheduleSchema = new Schema(
 const ImageRightsSchema = new Schema(
     {
         authorizing_tutor: {
-        name: { type: String, required: true },
-        dni: { type: String, required: true }
+            name: { type: String, required: true },
+            dni: { type: String, required: true }
         },
         authorized: { type: Boolean, required: true }
     },
@@ -40,7 +44,7 @@ const UserSchema = new Schema<IUser>(
         name: { type: String, required: true },
         surname: { type: String, required: true },
         username: { type: String, required: true, unique: true },
-        email: { type: String, required: true, unique: true },
+        email: { type: String, required: true },
         password: { type: String, required: true },
         validated: { type: Boolean, default: false, required: true },
         role: { type: String, enum: ["admin", "user", "gimnast"], default: "user", required: true },
@@ -55,6 +59,7 @@ const UserSchema = new Schema<IUser>(
         schedule: [ScheduleSchema],
         parents: [ParentInfoSchema],
         imageRights: ImageRightsSchema,
+        bancInfo: BancInfoSchema,
         language: { type: String, enum: ["ca", "es", "en_US"], default: "es", required: true }
     },
     {
