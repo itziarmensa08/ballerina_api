@@ -1,7 +1,9 @@
-import { sendValidationEmail } from "../config/mail";
 import { IUser } from "../interfaces/user.interface";
 import UserModel from "../models/user.model";
 import { generateAccessToken, generateRefreshToken, verifyAccessToken, verifyRefreshToken } from "../utils/jwt.utils";
+import path from 'path';
+import fs from 'fs';
+import { transporter } from "../config/mail";
 
 
 /**
@@ -27,7 +29,22 @@ export const registerUserService = async (userData: Partial<IUser>) => {
     await newUser.save();
 
     const token = generateAccessToken(newUser._id.toString(), newUser.role);
-    await sendValidationEmail(newUser.email, token);
+
+    if (newUser.role == 'user') {
+        const validationLink = `${process.env.ORIGIN}/validate/${token}`;
+        const templatePath = path.join(__dirname, '..', 'config/templates', 'confirm-template.html');
+        let html = fs.readFileSync(templatePath, 'utf8');
+
+        html = html
+            .replace(/{{validationLink}}/g, validationLink);
+
+        await transporter.sendMail({
+            from: process.env.SMTP_FROM,
+            to: email,
+            subject: `Validació del compte`,
+            html
+        });
+    }
 
     return newUser;
 };

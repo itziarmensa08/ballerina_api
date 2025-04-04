@@ -34,7 +34,7 @@ transporter.verify((error, success) => {
  * @param token - Validation token
  */
 export const sendValidationEmail = async (email: string, token: string) => {
-    const validationLink = `${process.env.FRONTEND_URL}/validate/${token}`;
+    const validationLink = `${process.env.ORIGIN}/validate/${token}`;
     const templatePath = path.join(__dirname, '..', 'config/templates', 'confirm-template.html');
     let html = fs.readFileSync(templatePath, 'utf8');
 
