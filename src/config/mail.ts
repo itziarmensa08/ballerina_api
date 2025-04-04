@@ -1,5 +1,7 @@
 import nodemailer from 'nodemailer';
 import logger from './logger';
+import path from 'path';
+import fs from 'fs';
 
 process.loadEnvFile();
 
@@ -33,13 +35,16 @@ transporter.verify((error, success) => {
  */
 export const sendValidationEmail = async (email: string, token: string) => {
     const validationLink = `${process.env.FRONTEND_URL}/validate/${token}`;
-    const mailOptions = {
+    const templatePath = path.join(__dirname, '..', 'config/templates', 'confirm-template.html');
+    let html = fs.readFileSync(templatePath, 'utf8');
+
+    html = html
+        .replace(/{{validationLink}}/g, validationLink);
+
+    await transporter.sendMail({
         from: process.env.SMTP_FROM,
         to: email,
-        subject: "Account Validation",
-        html: `<p>Please validate your account by clicking the link below:</p>
-                <a href="${validationLink}">Validate Account</a>`,
-    };
-
-    await transporter.sendMail(mailOptions);
+        subject: `Validació del compte`,
+        html
+    });
 };
