@@ -6,6 +6,7 @@ import { routerText } from "./texts.routes";
 import { routerImages } from "./images.routes";
 import { routerCategories } from "./categories.routes";
 import { routerContact } from "./contact.routes";
+import { routerTry } from "./try.routes";
 
 const router = Router();
 
@@ -26,5 +27,8 @@ logger.info("Route initialized: /categories");
 
 router.use('/contact', routerContact);
 logger.info("Route initialized: /contact");
+
+router.use('/try', routerTry);
+logger.info("Route initialized: /try");
 
 export default router;
