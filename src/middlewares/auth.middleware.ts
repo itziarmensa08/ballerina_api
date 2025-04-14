@@ -18,6 +18,7 @@ export const authenticateJWT = (req: AuthRequest, res: Response, next: NextFunct
             req.user = decoded;
             next();
         } catch (error) {
+            console.log(error)
             res.status(403).json({ message: "Invalid or expired token." });
         }
     }

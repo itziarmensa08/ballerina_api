@@ -47,7 +47,7 @@ interface ImageRights {
 
 export type Role = 'admin' | 'user' | 'gimnast';
 export type Level = 'base' | 'escolar' | 'federat';
-export type Language = 'ca' | 'es' | 'en_US';
+export type Language = 'ca' | 'es' | 'en';
 export type WeekDay = 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
 
 // Extend the User interface to add a password comparison method

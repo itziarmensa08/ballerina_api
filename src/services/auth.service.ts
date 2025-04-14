@@ -12,7 +12,7 @@ import { transporter } from "../config/mail";
  * @returns New user data or error message
  */
 export const registerUserService = async (userData: Partial<IUser>) => {
-    const { username, email, password, ...otherData } = userData;
+    const { username, email, password, language = 'ca', ...otherData } = userData;
 
     // Check if the username or email already exists
     const existingUser = await UserModel.findOne({ $or: [{ username }] });
@@ -23,6 +23,7 @@ export const registerUserService = async (userData: Partial<IUser>) => {
         username,
         email,
         password,
+        language,
         ...otherData,
     });
 
@@ -30,21 +31,20 @@ export const registerUserService = async (userData: Partial<IUser>) => {
 
     const token = generateAccessToken(newUser._id.toString(), newUser.role);
 
-    if (newUser.role == 'user') {
-        const validationLink = `${process.env.ORIGIN}/validate/${token}`;
-        const templatePath = path.join(__dirname, '..', 'config/templates', 'confirm-template.html');
-        let html = fs.readFileSync(templatePath, 'utf8');
+    const validationLink = `${process.env.ORIGIN}/validate/${token}`;
+    const templateFilename = `confirm-template.${language}.html`;
+    const templatePath = path.join(__dirname, '..', 'config', 'templates', templateFilename);
+    let html = fs.readFileSync(templatePath, 'utf8');
 
-        html = html
-            .replace(/{{validationLink}}/g, validationLink);
+    html = html
+        .replace(/{{validationLink}}/g, validationLink);
 
-        await transporter.sendMail({
-            from: process.env.SMTP_FROM,
-            to: email,
-            subject: `Validació del compte`,
-            html
-        });
-    }
+    await transporter.sendMail({
+        from: process.env.SMTP_FROM,
+        to: email,
+        subject: `Validació del compte`,
+        html
+    });
 
     return newUser;
 };

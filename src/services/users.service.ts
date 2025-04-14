@@ -26,6 +26,15 @@ export const updateUserById = async (id: string, updateData: Partial<IUser>): Pr
 };
 
 /**
+ * Change lamguage user by ID
+ * @param id - User's ID
+ * @param lang - Language
+ */
+export const changeLangByID = async (id: string, lang: string): Promise<IUser | null> => {
+    return await UserModel.findByIdAndUpdate(id, {language: lang}, { new: true });
+};
+
+/**
  * Delete a user by ID
  * @param id - User's ID
  */
