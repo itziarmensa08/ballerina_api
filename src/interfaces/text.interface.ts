@@ -6,5 +6,5 @@ export interface Text {
 export interface TextValue {
     ca: string;
     es: string;
-    en_US: string;
+    en: string;
 }

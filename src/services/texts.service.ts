@@ -5,7 +5,7 @@ import { TextModel } from "../models/text.model";
 /**
  * Get a text by key and language
  * @param key - Text key
- * @param lang - Language code (ca, es, en_US)
+ * @param lang - Language code (ca, es, en)
  */
 export const getText = async (key: string, lang: string): Promise<string | null> => {
     const text = await TextModel.findOne({ key });
@@ -25,7 +25,7 @@ export const createText = async (newText: Text): Promise<Text> => {
 /**
  * Update a text in a specific language
  * @param key - Text key
- * @param lang - Language code (ca, es, en_US)
+ * @param lang - Language code (ca, es, en)
  * @param value - New text value
  */
 export const updateText = async (key: string, newText: Text): Promise<Text | null> => {

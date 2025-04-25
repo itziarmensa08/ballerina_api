@@ -40,16 +40,16 @@ export const getUserByIdController = async (req: Request, res: Response) => {
  */
 export const updateUserByIdController = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const updateData = req.body;
+    const { user } = req.body;
 
     try {
-        const user = await updateUserById(id, updateData);
-        if (!user) {
+        const updatedUser = await updateUserById(id, user);
+        if (!updatedUser) {
             logger.error(`Error updateUserByIdController: User not found`)
             res.status(404).json({ message: "User not found" });
             return;
         }
-        res.status(200).json(user);
+        res.status(200).json(updatedUser);
     } catch (error) {
         logger.error(`Error updateUserByIdController: ${error}`)
         res.status(500).json({ message: "Server error, please try again later" });

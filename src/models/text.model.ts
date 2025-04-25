@@ -7,7 +7,7 @@ const textSchema = new mongoose.Schema<Text>(
     value: {
       ca: { type: String, required: true },
       es: { type: String, required: true },
-      en_US: { type: String, required: true },
+      en: { type: String, required: true },
     },
   }, {
     timestamps: true,
