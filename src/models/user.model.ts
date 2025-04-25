@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 import bcrypt from "bcrypt";
-import { IUser } from "../interfaces/user.interface";
+import { IUser, Language } from "../interfaces/user.interface";
 
 const ParentInfoSchema = new Schema(
     {
@@ -60,7 +60,7 @@ const UserSchema = new Schema<IUser>(
         parents: [ParentInfoSchema],
         imageRights: ImageRightsSchema,
         bancInfo: BancInfoSchema,
-        language: { type: String, enum: ["ca", "es", "en_US"], default: "es", required: true }
+        language: { type: String, enum: ["ca", "es", "en"], default: "es", required: true }
     },
     {
         timestamps: true,
