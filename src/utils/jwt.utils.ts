@@ -1,8 +1,10 @@
 import { sign, verify, JwtPayload } from "jsonwebtoken";
 import logger from "../config/logger";
 
-const JWT_SECRET = process.env.JWT_SECRET || "token.0101";
-const REFRESH_SECRET = process.env.REFRESH_SECRET || "refresh.0202";
+process.loadEnvFile();
+
+const JWT_SECRET = process.env.JWT_SECRET;
+const REFRESH_SECRET = process.env.REFRESH_SECRET;
 
 /**
  * Generate an access token
@@ -10,8 +12,9 @@ const REFRESH_SECRET = process.env.REFRESH_SECRET || "refresh.0202";
  * @param role - User role
  * @returns Signed JWT access token
  */
-const generateAccessToken = (id: string, role: string): string => {
-    return sign({ id, role }, JWT_SECRET, { expiresIn: "1h" }); // Access token expires in 1 hour
+const generateAccessToken = (id: string, role: string): string | undefined => {
+    if (JWT_SECRET) return sign({ id, role }, JWT_SECRET, { expiresIn: "1h" }); // Access token expires in 1 hour
+    else logger.error("JWT_SECRET not found");
 };
 
 /**
@@ -19,8 +22,9 @@ const generateAccessToken = (id: string, role: string): string => {
  * @param id - User ID
  * @returns Signed JWT refresh token
  */
-const generateRefreshToken = (id: string): string => {
-    return sign({ id }, REFRESH_SECRET, { expiresIn: "7d" }); // Refresh token expires in 7 days
+const generateRefreshToken = (id: string): string | undefined => {
+    if (REFRESH_SECRET) return sign({ id }, REFRESH_SECRET, { expiresIn: "7d" }); // Refresh token expires in 7 days
+    else logger.error("REFRESH_SECRET not found");
 };
 
 /**
@@ -28,9 +32,10 @@ const generateRefreshToken = (id: string): string => {
  * @param token - JWT token to verify
  * @returns Decoded payload or null if invalid
  */
-const verifyAccessToken = (token: string): JwtPayload | null => {
+const verifyAccessToken = (token: string): JwtPayload | null | undefined => {
     try {
-        return verify(token, JWT_SECRET) as JwtPayload;
+        if (JWT_SECRET) return verify(token, JWT_SECRET) as JwtPayload;
+        else logger.error("JWT_SECRET not found");
     } catch (error) {
         logger.error("Access token verification failed:", error);
         return null;
@@ -42,9 +47,10 @@ const verifyAccessToken = (token: string): JwtPayload | null => {
  * @param token - JWT refresh token to verify
  * @returns Decoded payload or null if invalid
  */
-const verifyRefreshToken = (token: string): JwtPayload | null => {
+const verifyRefreshToken = (token: string): JwtPayload | null | undefined => {
     try {
-        return verify(token, REFRESH_SECRET) as JwtPayload;
+        if (REFRESH_SECRET) return verify(token, REFRESH_SECRET) as JwtPayload;
+        else logger.error("REFRESH_SECRET not found");
     } catch (error) {
         logger.error("Refresh token verification failed:", error);
         return null;
