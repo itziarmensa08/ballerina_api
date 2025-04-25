@@ -5,6 +5,7 @@ import { tmpdir } from 'os';
 import { join } from 'path';
 import { writeFile, unlink } from 'fs/promises';
 import fs from 'fs';
+import logger from '../config/logger';
 
 ffmpeg.setFfmpegPath(ffmpegInstaller.path);
 
@@ -53,7 +54,7 @@ export const maybeCompressFile = async (file: Express.Multer.File): Promise<Buff
       if (compressed.length < MAX_SIZE_BYTES) return compressed;
       throw new Error('Image still too large after compression');
     } catch (err) {
-      console.error('Error compressing image:', err);
+      logger.error('Error compressing image:', err);
       throw err;
     }
   }
@@ -64,7 +65,7 @@ export const maybeCompressFile = async (file: Express.Multer.File): Promise<Buff
       if (compressed.length < MAX_SIZE_BYTES) return compressed;
       throw new Error('Video still too large after compression');
     } catch (err) {
-      console.error('Error compressing video:', err);
+      logger.error('Error compressing video:', err);
       throw err;
     }
   }

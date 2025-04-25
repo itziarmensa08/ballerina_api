@@ -24,12 +24,13 @@ export const uploadToCloudinary = async (fileBuffer: Buffer, folder: string): Pr
   return new Promise((resolve, reject) => {
     cloudinary.uploader.upload_stream({ resource_type: "auto", folder: folder }, (error, result) => {
       if (error) {
-        console.error("Error subiendo a Cloudinary:", error);
+        logger.error(`Error subiendo a Cloudinary: ${error}`)
         return reject(error);
       }
       if (result?.secure_url) {
         return resolve(result.secure_url);
       } else {
+        logger.error(`Error subiendo a Cloudinary: No se recibió una URL de Cloudinary`)
         return reject("No se recibió una URL de Cloudinary");
       }
     }).end(fileBuffer);
