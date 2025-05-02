@@ -18,6 +18,7 @@ export interface User extends Auth {
     imageRights?: ImageRights;
     language: Language;
     bancInfo?: BancInfo; 
+    notifications: Boolean;
 }
 
 interface ParentInfo {

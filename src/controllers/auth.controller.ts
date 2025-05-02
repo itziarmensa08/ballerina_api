@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { registerUserService, loginUserService, validateUserService, refreshTokenService } from "../services/auth.service";
+import { registerUserService, loginUserService, validateUserService, refreshTokenService, changePasswordService } from "../services/auth.service";
 import logger from "../config/logger";
 
 /**
@@ -92,8 +92,8 @@ export const validateUserController = async (req: Request, res: Response) => {
     const { token } = req.params;
 
     try {
-        await validateUserService(token);
-        res.status(200).json({ message: "Account validated successfully" });
+        const { user, message } = await validateUserService(token);
+        res.status(200).json({ user, message: message ?? "Account validated successfully" });
     } catch (error: any) {
         // Handle specific errors from the service
         if (error.message === "USER_NOT_FOUND") {
@@ -111,6 +111,38 @@ export const validateUserController = async (req: Request, res: Response) => {
         else {
             // Handle unexpected errors
             logger.error(`Error validateUserController: ${error}`)
+            res.status(500).json({ message: "Server error, please try again later" });
+        }
+    }
+};
+
+/**
+ * Controller to change user password
+ * @param req - Express request object
+ * @param res - Express response object
+ */
+export const changePasswordController = async (req: Request, res: Response) => {
+    const userId = req.params.id;
+    const { currentPassword, newPassword } = req.body;
+
+    if (!userId || !currentPassword || !newPassword) {
+        logger.warn("Missing required fields for password change");
+        res.status(400).json({ message: "Missing required fields" });
+        return;
+    }
+
+    try {
+        const result = await changePasswordService(userId, currentPassword, newPassword);
+        res.status(200).json(result);
+    } catch (error: any) {
+        if (error.message === "USER_NOT_FOUND") {
+            logger.error("User not found in changePasswordController");
+            res.status(404).json({ message: "User not found" });
+        } else if (error.message === "INVALID_CURRENT_PASSWORD") {
+            logger.warn("Invalid current password in changePasswordController");
+            res.status(401).json({ message: "Current password is incorrect" });
+        } else {
+            logger.error(`Unexpected error in changePasswordController: ${error}`);
             res.status(500).json({ message: "Server error, please try again later" });
         }
     }

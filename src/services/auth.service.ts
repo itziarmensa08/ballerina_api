@@ -5,6 +5,15 @@ import path from 'path';
 import fs from 'fs';
 import { transporter } from "../config/mail";
 
+const formatDate = (date: any) => {
+    if (!date) return '';
+    const d = new Date(date);
+    return d.toLocaleDateString('ca-ES', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric',
+    });
+};
 
 /**
  * Register a new user
@@ -45,6 +54,26 @@ export const registerUserService = async (userData: Partial<IUser>) => {
         subject: `Validació del compte`,
         html
     });
+
+    if (newUser.role == 'gimnast') {
+        const templateFilename = `gimnast-register-template.html`;
+        const templatePath = path.join(__dirname, '..', 'config', 'templates', templateFilename);
+        let html = fs.readFileSync(templatePath, 'utf8');
+
+        html = html
+            .replace(/{{name}}/g, `${newUser.name} ${newUser.surname}`)
+            .replace(/{{email}}/g, newUser.email)
+            .replace(/{{dni}}/g, newUser.dni ?? '')
+            .replace(/{{dateBorn}}/g, formatDate(newUser.dateBorn))
+            .replace(/{{messageRow}}/g, '');
+
+        await transporter.sendMail({
+            from: process.env.SMTP_FROM,
+            to: process.env.CONTACT_TO,
+            subject: `Nova inscripció`,
+            html
+        });
+    }
 
     return newUser;
 };
@@ -104,7 +133,7 @@ export const refreshTokenService = async (refreshToken: string) => {
  * @param token - The JWT token from the validation link
  * @returns Updated user data or an error message
  */
-export const validateUserService = async (token: string): Promise<IUser> => {
+export const validateUserService = async (token: string): Promise<{ user: IUser; message?: string }>=> {
     // Verify and decode the token using the utility function
     const decoded = verifyAccessToken(token);
 
@@ -123,5 +152,29 @@ export const validateUserService = async (token: string): Promise<IUser> => {
     user.validated = true;
     await user.save();
 
-    return user;
+    const isTemporal = await user.comparePassword('temporal');
+    const message = isTemporal ? 'PASSWORD_TEMPORAL' : undefined;
+
+    return { user, message };
 };
+
+/**
+ * Change user password
+ * @param userId - ID of the authenticated user
+ * @param currentPassword - Current password of the user
+ * @param newPassword - New password to set
+ * @returns Success message or error
+ */
+export const changePasswordService = async (userId: string, currentPassword: string, newPassword: string) => {
+    const user = await UserModel.findById(userId);
+    if (!user) throw new Error("USER_NOT_FOUND");
+  
+    const isMatch = await user.comparePassword(currentPassword);
+    if (!isMatch) throw new Error("INVALID_CURRENT_PASSWORD");
+  
+    user.password = newPassword;
+    await user.save();
+  
+    return { message: "PASSWORD_UPDATED_SUCCESSFULLY" };
+};
+  

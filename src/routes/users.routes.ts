@@ -10,6 +10,6 @@ router.get("/", authenticateJWT, authorizeAdmin, getAllUsersController);
 router.get("/:id", authenticateJWT, authorizeAdmin, getUserByIdController);
 router.put("/:id", authenticateJWT, updateUserByIdController);
 router.put("/:id/:lang", chnageLangByIdController);
-router.delete("/:id", authenticateJWT, authorizeAdmin, deleteUserByIdController);
+router.delete("/:id", authenticateJWT, deleteUserByIdController);
 
 export { router as routerUser};

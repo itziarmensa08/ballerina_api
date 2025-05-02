@@ -60,7 +60,8 @@ const UserSchema = new Schema<IUser>(
         parents: [ParentInfoSchema],
         imageRights: ImageRightsSchema,
         bancInfo: BancInfoSchema,
-        language: { type: String, enum: ["ca", "es", "en"], default: "es", required: true }
+        language: { type: String, enum: ["ca", "es", "en"], default: "es", required: true },
+        notifications: { type: Boolean, default: true, required: true }
     },
     {
         timestamps: true,
