@@ -33,12 +33,13 @@ export const registerUserService = async (userData: Partial<IUser>) => {
         email,
         password,
         language,
+        roles: ['user'],
         ...otherData,
     });
 
     await newUser.save();
 
-    const token = generateAccessToken(newUser._id.toString(), newUser.role);
+    const token = generateAccessToken(newUser._id.toString(), newUser.roles);
 
     const validationLink = `${process.env.ORIGIN}/validate/${token}`;
     const templateFilename = `confirm-template.${language}.html`;
@@ -55,7 +56,7 @@ export const registerUserService = async (userData: Partial<IUser>) => {
         html
     });
 
-    if (newUser.role == 'gimnast') {
+    if (newUser.roles?.includes('gimnast')) {
         const templateFilename = `gimnast-register-template.html`;
         const templatePath = path.join(__dirname, '..', 'config', 'templates', templateFilename);
         let html = fs.readFileSync(templatePath, 'utf8');
@@ -93,7 +94,7 @@ export const loginUserService = async (username: string, password: string) => {
     if (!isMatch) throw new Error("INVALID PASS");
 
     // Generate JWT tokens
-    const accessToken = generateAccessToken(user._id.toString(), user.role);
+    const accessToken = generateAccessToken(user._id.toString(), user.roles);
     const refreshToken = generateRefreshToken(user._id.toString());
 
     await user.save();
@@ -122,7 +123,7 @@ export const refreshTokenService = async (refreshToken: string) => {
     }
 
     // Generate new access token
-    const newAccessToken = generateAccessToken(user._id.toString(), user.role);
+    const newAccessToken = generateAccessToken(user._id.toString(), user.roles);
     const newRefreshToken = generateRefreshToken(user._id.toString());
 
     return { accessToken: newAccessToken, refreshToken: newRefreshToken };

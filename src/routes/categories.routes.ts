@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { authenticateJWT } from "../middlewares/auth.middleware";
-import { authorizeAdmin } from "../middlewares/admin.middleware";
+import { authorizeRoles } from "../middlewares/roles.middleware";
 import multer from "multer";
 import { createCategoryController, deleteCategoryController, getAllCategoriesController, getCategorieByTypeController, getCategoryController, updateCategoryController } from "../controllers/categories.controller";
 
@@ -10,9 +10,9 @@ const upload = multer();
 // Routes for texts CRUD operations
 router.get("/", getAllCategoriesController);
 router.get("/type/:type", getCategorieByTypeController);
-router.get("/:id", authenticateJWT, authorizeAdmin, getCategoryController);
-router.post("/", authenticateJWT, authorizeAdmin, upload.array('files', 10), createCategoryController);
-router.put("/:id", authenticateJWT, authorizeAdmin, upload.array('files', 10), updateCategoryController);
-router.delete("/:id", authenticateJWT, authorizeAdmin, deleteCategoryController);
+router.get("/:id", authenticateJWT, authorizeRoles('admin'), getCategoryController);
+router.post("/", authenticateJWT, authorizeRoles('admin'), upload.array('files', 10), createCategoryController);
+router.put("/:id", authenticateJWT, authorizeRoles('admin'), upload.array('files', 10), updateCategoryController);
+router.delete("/:id", authenticateJWT, authorizeRoles('admin'), deleteCategoryController);
 
 export { router as routerCategories};

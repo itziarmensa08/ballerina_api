@@ -4,7 +4,7 @@ export interface User extends Auth {
     name: string;
     surname: string;
     email: string;
-    role: Role;
+    roles: Role[];
     telephone?: string;
     dni?: string;
     catSalut?: string;
@@ -46,7 +46,7 @@ interface ImageRights {
     authorized: boolean;
 }
 
-export type Role = 'admin' | 'user' | 'gimnast';
+export type Role = 'admin' | 'user' | 'gimnast' | 'coach';
 export type Level = 'base' | 'escolar' | 'federat';
 export type Language = 'ca' | 'es' | 'en';
 export type WeekDay = 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';

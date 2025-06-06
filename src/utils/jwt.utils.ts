@@ -1,5 +1,6 @@
 import { sign, verify, JwtPayload } from "jsonwebtoken";
 import logger from "../config/logger";
+import { Role } from "../interfaces/user.interface";
 
 process.loadEnvFile();
 
@@ -12,8 +13,8 @@ const REFRESH_SECRET = process.env.REFRESH_SECRET;
  * @param role - User role
  * @returns Signed JWT access token
  */
-const generateAccessToken = (id: string, role: string): string | undefined => {
-    if (JWT_SECRET) return sign({ id, role }, JWT_SECRET, { expiresIn: "1h" }); // Access token expires in 1 hour
+const generateAccessToken = (id: string, roles: Role[]): string | undefined => {
+    if (JWT_SECRET) return sign({ id, roles }, JWT_SECRET, { expiresIn: "1h" }); // Access token expires in 1 hour
     else logger.error("JWT_SECRET not found");
 };
 
