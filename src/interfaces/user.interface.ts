@@ -21,24 +21,24 @@ export interface User extends Auth {
     notifications: Boolean;
 }
 
-interface ParentInfo {
+export interface ParentInfo {
     name: string;
     surname: string;
     telephone?: string;
 }
 
-interface BancInfo {
+export interface BancInfo {
     iban: string;
     titularity: string;
 }
 
-interface Schedule {
+export interface Schedule {
     day: WeekDay;
     startTime: string;
     endTime: string;
 }
 
-interface ImageRights {
+export interface ImageRights {
     authorizing_tutor: {
         name: string;
         dni: string

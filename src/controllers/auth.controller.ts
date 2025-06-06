@@ -33,7 +33,7 @@ export const loginController = async (req: Request, res: Response) => {
     const { username, password } = req.body;
 
     try {
-        const { accessToken, refreshToken, user } = await loginUserService(username, password);
+        const { accessToken, refreshToken, user } = await loginUserService({username, password});
         res.json({ accessToken, refreshToken, user });
     } catch (error: any) {
         // Handle specific errors for invalid credentials

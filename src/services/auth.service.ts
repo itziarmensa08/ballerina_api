@@ -4,6 +4,7 @@ import { generateAccessToken, generateRefreshToken, verifyAccessToken, verifyRef
 import path from 'path';
 import fs from 'fs';
 import { transporter } from "../config/mail";
+import { CreateUserDTO, LoginDTO } from "../dtos/user.dto";
 
 const formatDate = (date: any) => {
     if (!date) return '';
@@ -20,7 +21,7 @@ const formatDate = (date: any) => {
  * @param userData - Contains user data from request body
  * @returns New user data or error message
  */
-export const registerUserService = async (userData: Partial<IUser>) => {
+export const registerUserService = async (userData: CreateUserDTO): Promise<IUser> => {
     const { username, email, password, language = 'ca', ...otherData } = userData;
 
     // Check if the username or email already exists
@@ -85,7 +86,13 @@ export const registerUserService = async (userData: Partial<IUser>) => {
  * @param password - Password from request
  * @returns JWT tokens (access & refresh) or error message
  */
-export const loginUserService = async (username: string, password: string) => {
+export const loginUserService = async (userData: LoginDTO): Promise<{
+    accessToken: string;
+    refreshToken: string;
+    user: IUser;
+}> => {
+    const username = userData.username;
+    const password = userData.password;
     const user = await UserModel.findOne({ username });
 
     if (!user) throw new Error("NOT USER");
@@ -99,7 +106,7 @@ export const loginUserService = async (username: string, password: string) => {
 
     await user.save();
 
-    return { accessToken, refreshToken, user };
+    return { accessToken: accessToken ?? '', refreshToken: refreshToken ?? '', user };
 };
 
 /**

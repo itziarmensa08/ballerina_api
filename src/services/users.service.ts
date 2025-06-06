@@ -1,5 +1,6 @@
 import UserModel from "../models/user.model";
 import { IUser } from "../interfaces/user.interface";
+import { UpdateUserDTO } from "../dtos/user.dto";
 
 /**
  * Get all users
@@ -21,7 +22,7 @@ export const getUserById = async (id: string): Promise<IUser | null> => {
  * @param id - User's ID
  * @param updateData - Data to update
  */
-export const updateUserById = async (id: string, updateData: Partial<IUser>): Promise<IUser | null> => {
+export const updateUserById = async (id: string, updateData: UpdateUserDTO): Promise<IUser | null> => {
     return await UserModel.findByIdAndUpdate(id, updateData, { new: true });
 };
 
