@@ -28,13 +28,18 @@ export const registerUserService = async (userData: CreateUserDTO): Promise<IUse
     const existingUser = await UserModel.findOne({ $or: [{ username }] });
     if (existingUser) throw new Error("ALREADY USER");
 
+    const allowedRoles = ['user', ...(otherData.roles || [])]
+    .filter(role => role !== 'admin');
+
+    delete otherData.roles;
+
     // Hash the password automatically in the User model, so no need to hash it here
     const newUser = new UserModel({
         username,
         email,
         password,
         language,
-        roles: ['user'],
+        roles: allowedRoles,
         ...otherData,
     });
 
