@@ -4,8 +4,8 @@ import { IUser, Language } from "../interfaces/user.interface";
 
 const ParentInfoSchema = new Schema(
     {
-        name: { type: String, required: true },
-        surname: { type: String, required: true },
+        name: { type: String },
+        surname: { type: String },
         telephone: { type: String }
     },
     { _id: false }
