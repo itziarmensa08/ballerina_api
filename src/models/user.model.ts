@@ -47,7 +47,7 @@ const UserSchema = new Schema<IUser>(
         email: { type: String, required: true },
         password: { type: String, required: true },
         validated: { type: Boolean, default: false, required: true },
-        roles: [{ type: String, enum: ["admin", "user", "gimnast", "coach"], default: ["user"], required: true }],
+        roles: [{ type: String, enum: ["admin", "user", "gimnast", "coach"], default: [], required: true }],
         telephone: { type: String },
         dni: { type: String },
         catSalut: { type: String },

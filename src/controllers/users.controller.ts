@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getAllUsers, getUserById, updateUserById, deleteUserById, changeLangByID } from "../services/users.service";
+import { getAllUsers, getUserById, updateUserById, deleteUserById, changeLangByID, getUsersCountByRole, getGimnasts, getUsers, getAdmins } from "../services/users.service";
 import logger from "../config/logger";
 
 /**
@@ -13,6 +13,45 @@ export const getAllUsersController = async (req: Request, res: Response) => {
         logger.error(`Error getAllUsersController: ${error}`)
         res.status(500).json({ message: "Server error, please try again later" });
     }
+};
+
+/**
+ * Get all admins
+ */
+export const getAdminsController = async (req: Request, res: Response) => {
+  try {
+    const admins = await getAdmins();
+    res.status(200).json(admins);
+  } catch (error) {
+    logger.error(`Error getAdminsController: ${error}`);
+    res.status(500).json({ message: "Server error, please try again later" });
+  }
+};
+
+/**
+ * Get all users (role: user)
+ */
+export const getUsersController = async (req: Request, res: Response) => {
+  try {
+    const users = await getUsers();
+    res.status(200).json(users);
+  } catch (error) {
+    logger.error(`Error getUsersController: ${error}`);
+    res.status(500).json({ message: "Server error, please try again later" });
+  }
+};
+
+/**
+ * Get all gimnasts
+ */
+export const getGimnastsController = async (req: Request, res: Response) => {
+  try {
+    const gimnasts = await getGimnasts();
+    res.status(200).json(gimnasts);
+  } catch (error) {
+    logger.error(`Error getGimnastsController: ${error}`);
+    res.status(500).json({ message: "Server error, please try again later" });
+  }
 };
 
 /**
@@ -92,6 +131,19 @@ export const deleteUserByIdController = async (req: Request, res: Response) => {
         res.status(200).json({ message: "User deleted successfully" });
     } catch (error) {
         logger.error(`Error deleteUserByIdController: ${error}`)
+        res.status(500).json({ message: "Server error, please try again later" });
+    }
+};
+
+/**
+ * Get users count by role
+ */
+export const getUsersCountByRoleController = async (req: Request, res: Response) => {
+    try {
+        const counts = await getUsersCountByRole();
+        res.status(200).json(counts);
+    } catch (error) {
+        logger.error(`Error getUsersCountByRoleController: ${error}`);
         res.status(500).json({ message: "Server error, please try again later" });
     }
 };

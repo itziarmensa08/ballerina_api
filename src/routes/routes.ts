@@ -7,6 +7,7 @@ import { routerImages } from "./images.routes";
 import { routerCategories } from "./categories.routes";
 import { routerContact } from "./contact.routes";
 import { routerTry } from "./try.routes";
+import { visitsRouter } from "./visits.routes";
 
 const router = Router();
 
@@ -29,6 +30,9 @@ router.use('/contact', routerContact);
 logger.info("Route initialized: /contact");
 
 router.use('/try', routerTry);
+logger.info("Route initialized: /try");
+
+router.use('/visits', visitsRouter);
 logger.info("Route initialized: /try");
 
 export default router;
