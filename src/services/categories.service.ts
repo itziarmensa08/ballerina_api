@@ -16,7 +16,7 @@ export const getAllCategories = async (): Promise<ICategory[]> => {
  * Get category by type
  */
 export const getCategoriesByType = async (type: String): Promise<ICategory[]> => {
-    return await CategoryModel.find({ type });
+    return await CategoryModel.find({ type }).sort({ createdAt: -1 });
 };
 
 /**
