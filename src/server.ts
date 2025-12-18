@@ -4,6 +4,9 @@ import { dbConnect } from './config/mongo';
 import router from './routes/routes';
 import cors from 'cors';
 import "./config/cloudinary"; 
+import { visitorMiddleware } from './middlewares/visitor.middleware';
+import cookieParser from 'cookie-parser';
+import './types/express';
 
 process.loadEnvFile();
 
@@ -11,6 +14,9 @@ const app: Application = express();
 app.use(express.json());
 
 app.use(cors({ origin: process.env.ORIGIN }));
+
+app.use(cookieParser());
+app.use(visitorMiddleware);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => logger.info(`Server running on port ${PORT}`));

@@ -1,18 +1,37 @@
+import logger from "../config/logger";
 import { IVisit } from "../interfaces/visit.interface";
 import { VisitModel } from "../models/visit.model";
 
 /**
  * Increment today's visit count or create if it doesn't exist.
  */
-export const registerVisit = async (): Promise<void> => {
+export const registerVisit = async (visitorId: string): Promise<void> => {
   const today = new Date().toISOString().split("T")[0];
-  const existingVisit = await VisitModel.findOne({ date: today });
+  const visit = await VisitModel.findOne({ date: today });
 
-  if (existingVisit) {
-    existingVisit.count += 1;
-    await existingVisit.save();
+  if (!visit) {
+    logger.info(`No visit found for today: ${today}. Creating new record.`);
+    await VisitModel.create({
+      date: today,
+      count: 1,
+      visitors: [visitorId],
+    });
+    return;
+  }
+
+  logger.info(`Existing visit found for today: ${today}`);
+
+  if (!visit.visitors) {
+    visit.visitors = [];
+  }
+
+  if (!visit.visitors.includes(visitorId)) {
+    logger.info(`New visitor for today: ${visitorId}. Incrementing count.`);
+    visit.count += 1;
+    visit.visitors.push(visitorId);
+    await visit.save();
   } else {
-    await VisitModel.create({ date: today, count: 1 });
+    logger.info(`Visitor ${visitorId} has already been counted today.`);
   }
 };
 

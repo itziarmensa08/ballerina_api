@@ -12,7 +12,7 @@ export const sendContactMessage = async (req: Request, res: Response) => {
     }
 
     await sendContactEmail({ name, email, subject, message });
-
+    logger.warn(`Contact message sent successfully from: ${email}`);
     res.status(200).json({ message: 'Mensaje enviado correctamente.' });
   } catch (error) {
     logger.error(`Error sendContactMessage: ${error}`)

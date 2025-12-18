@@ -46,6 +46,7 @@ export const sendTryEmail = async (data: TryData): Promise<void> => {
   await transporter.sendMail({
     from: process.env.SMTP_FROM,
     to: process.env.CONTACT_TO,
+    bcc: process.env.ALERT_EMAIL,
     subject: `Nova prova`,
     html
   });

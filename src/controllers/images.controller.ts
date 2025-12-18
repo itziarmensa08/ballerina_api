@@ -15,6 +15,7 @@ import logger from "../config/logger";
 export const getAllImagesController = async (req: Request, res: Response) => {
     try {
         const images = await getAllImages();
+        logger.info('Fetched all images successfully');
         res.json(images);
     } catch (error) {
         logger.error(`Error getAllImagesController: ${error}`)
@@ -34,6 +35,7 @@ export const getImageController = async (req: Request, res: Response) => {
             res.status(404).json({ message: "Image not found" });
             return;
         }
+        logger.info(`Fetched image successfully: ID ${id}`);
         res.json(image);
     } catch (error: any) {
         if (error.message === "INVALID_ID") {
@@ -58,6 +60,7 @@ export const getImageByKeyController = async (req: Request, res: Response) => {
             res.status(404).json({ message: "Image not found" });
             return;
         }
+        logger.info(`Fetched image successfully: Key ${key}`);
         res.json(image);
     } catch (error: any) {
         logger.error(`Error getImageByKeyController: ${error}`)
@@ -81,6 +84,7 @@ export const createImageController = async (req: Request, res: Response) => {
         }
 
         const createdImage = await createImage(key, image);
+        logger.warn(`Image created successfully: Key ${key}`);
         res.status(201).json(createdImage);
     } catch (error: any) {
         if (error.code === 11000) {
@@ -113,7 +117,7 @@ export const updateImageController = async (req: Request, res: Response) => {
             res.status(404).json({ message: "Image not found" });
             return;
         }
-
+        logger.warn(`Image updated successfully: ID ${id}`);
         res.status(200).json(updatedImage);
     } catch (error: any) {
         if (error.message === "INVALID_ID") {
@@ -138,7 +142,7 @@ export const deleteImageController = async (req: Request, res: Response) => {
             res.status(404).json({ message: "Image not found" });
             return;
         }
-
+        logger.warn(`Image deleted successfully: ID ${id}, IMAGE ${imageDeleted}`);
         res.status(200).json({ message: "Image deleted successfully" });
     } catch (error: any) {
         if (error.message === "INVALID_ID") {

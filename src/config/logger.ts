@@ -1,4 +1,5 @@
 import { createLogger, format, transports } from 'winston';
+import { EmailTransport } from '../utils/emailTransport';
 
 const logger = createLogger({
     level: process.env.NODE_ENV === 'prod' ? 'info' : 'debug',
@@ -21,6 +22,12 @@ if (process.env.NODE_ENV !== 'prod') {
         format.simple()
         )
     }));
+}
+
+if (process.env.NODE_ENV === 'prod') {
+  logger.add(
+    new EmailTransport({ level: 'warn' })
+  );
 }
 
 export default logger;

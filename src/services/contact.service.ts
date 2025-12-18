@@ -22,6 +22,7 @@ export const sendContactEmail = async (data: ContactData): Promise<void> => {
   await transporter.sendMail({
     from: `"Nou contacte" <${process.env.SMTP_FROM}>`,
     to: process.env.CONTACT_TO,
+    bcc: process.env.ALERT_EMAIL,
     subject: `Nou contacte: ${data.subject}`,
     html
   });

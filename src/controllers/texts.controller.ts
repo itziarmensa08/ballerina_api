@@ -14,6 +14,7 @@ export const getTextController = async (req: Request, res: Response) => {
             res.status(404).json({ message: "Text not found" });
             return;
         }
+        logger.info(`Fetched text successfully: Key ${key}, Language ${lang}`);
         res.json({ value: text });
     } catch (error) {
         logger.error(`Error getTextController: ${error}`)
@@ -28,6 +29,7 @@ export const createTextController = async (req: Request, res: Response) => {
     try {
         const newText = req.body;
         const createdText = await createText(newText);
+        logger.warn(`Text created successfully: Key ${createdText.key}`);
         res.status(201).json(createdText);
     } catch (error: any) {
         if (error.code == 11000) {
@@ -60,6 +62,8 @@ export const updateTextController = async (req: Request, res: Response) => {
             return;
         }
 
+        logger.warn(`Text updated successfully: Key ${key}`);
+
         res.json(updatedText);
     } catch (error) {
         logger.error(`Error updateTextController: ${error}`)
@@ -73,6 +77,7 @@ export const updateTextController = async (req: Request, res: Response) => {
 export const getAllTextsController = async (req: Request, res: Response) => {
     try {
         const texts = await getAllTexts();
+        logger.info(`Fetched all texts successfully`);
         res.json(texts);
     } catch (error) {
         logger.error(`Error getAllTextsController: ${error}`)
@@ -92,6 +97,7 @@ export const deleteTextController = async (req: Request, res: Response) => {
             res.status(404).json({ message: "Text not found" });
             return;
         }
+        logger.warn(`Text deleted successfully: Key ${key}, TEXT ${deletedText}`);
         res.json({ message: "Text deleted successfully" });
     } catch (error) {
         logger.error(`Error deleteTextController: ${error}`)

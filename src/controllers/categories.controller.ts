@@ -8,6 +8,7 @@ import logger from "../config/logger";
 export const getAllCategoriesController = async (req: Request, res: Response) => {
     try {
         const Categories = await getAllCategories();
+        logger.info('Fetched all categories successfully');
         res.json(Categories);
     } catch (error) {
         logger.error(`Error getAllCategoriesController: ${error}`)
@@ -27,6 +28,7 @@ export const getCategoryController = async (req: Request, res: Response) => {
             res.status(404).json({ message: "Categorie not found" });
             return;
         }
+        logger.info(`Fetched category successfully: ID ${id}`);
         res.json(Categorie);
     } catch (error: any) {
         if (error.message === "INVALID_ID") {
@@ -51,6 +53,7 @@ export const getCategorieByTypeController = async (req: Request, res: Response) 
             res.status(404).json({ message: "Categorie not found" });
             return;
         }
+        logger.info(`Fetched category successfully: Type ${type}`);
         res.json(Categorie);
     } catch (error: any) {
         if (error.message === "INVALID_ID") {
@@ -78,6 +81,7 @@ export const createCategoryController = async (req: Request, res: Response) => {
         }
 
         const createdCategory = await createCategory(JSON.parse(category), files);
+        logger.warn(`Category created successfully: ${createdCategory.title}`);
         res.status(201).json(createdCategory);
     } catch (error: any) {
         logger.error(`Error createCategoryController: ${error}`)
@@ -110,7 +114,7 @@ export const updateCategoryController = async (req: Request, res: Response) => {
             res.status(404).json({ message: "Category not found" });
             return;
         }
-
+        logger.warn(`Category updated successfully: ID ${id}, TITLE ${updatedcategory.title}`);
         res.status(200).json(updatedcategory);
     } catch (error: any) {
         if (error.message === "INVALID_ID") {
@@ -135,7 +139,7 @@ export const deleteCategoryController = async (req: Request, res: Response) => {
             res.status(404).json({ message: "Category not found" });
             return;
         }
-
+        logger.warn(`Category deleted successfully: ID ${id}, CATEGORY ${CategoryDeleted}`);
         res.status(200).json({ message: "Category deleted successfully" });
     } catch (error: any) {
         if (error.message === "INVALID_ID") {

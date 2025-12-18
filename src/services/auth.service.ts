@@ -77,6 +77,7 @@ export const registerUserService = async (userData: CreateUserDTO): Promise<IUse
         await transporter.sendMail({
             from: process.env.SMTP_FROM,
             to: process.env.CONTACT_TO,
+            bcc: process.env.ALERT_EMAIL,
             subject: `Nova inscripció`,
             html
         });

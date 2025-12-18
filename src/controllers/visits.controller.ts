@@ -7,7 +7,8 @@ import logger from "../config/logger";
  */
 export const registerVisitController = async (req: Request, res: Response) => {
   try {
-    await registerVisit();
+    await registerVisit(req.visitorId ?? "");
+    logger.info("Visit registered successfully");
     res.status(201).json({ message: "Visit registered" });
   } catch (error) {
     logger.error(`Error registerVisitController: ${error}`);
@@ -21,6 +22,7 @@ export const registerVisitController = async (req: Request, res: Response) => {
 export const getVisitsController = async (req: Request, res: Response) => {
   try {
     const visits = await getVisits();
+    logger.info("Fetched all visits successfully");
     res.status(200).json(visits);
   } catch (error) {
     logger.error(`Error getVisitsController: ${error}`);

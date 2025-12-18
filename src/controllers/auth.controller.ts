@@ -10,6 +10,7 @@ import logger from "../config/logger";
 export const registerController = async (req: Request, res: Response) => {
     try {
         const user = await registerUserService(req.body);
+        logger.warn(`User registered successfully: ${user.username}`);
         res.status(201).json(user);
     } catch (error: any) {
         // Handle specific error messages from the service
@@ -34,6 +35,7 @@ export const loginController = async (req: Request, res: Response) => {
 
     try {
         const { accessToken, refreshToken, user } = await loginUserService({username, password});
+        logger.warn(`User logged in successfully: ${username}`);
         res.json({ accessToken, refreshToken, user });
     } catch (error: any) {
         // Handle specific errors for invalid credentials
@@ -63,6 +65,7 @@ export const refreshTokenController = async (req: Request, res: Response) => {
 
     try {
         const tokens = await refreshTokenService(refreshToken);
+        logger.info('Access token refreshed successfully');
         res.json(tokens);
     } catch (error: any) {
         // Handle specific errors
@@ -93,6 +96,7 @@ export const validateUserController = async (req: Request, res: Response) => {
 
     try {
         const { user, message } = await validateUserService(token);
+        logger.warn(`User account validated successfully: ${user.username}`);
         res.status(200).json({ user, message: message ?? "Account validated successfully" });
     } catch (error: any) {
         // Handle specific errors from the service
@@ -133,6 +137,7 @@ export const changePasswordController = async (req: Request, res: Response) => {
 
     try {
         const result = await changePasswordService(userId, currentPassword, newPassword);
+        logger.warn(`Password changed successfully for user ID: ${userId}`);
         res.status(200).json(result);
     } catch (error: any) {
         if (error.message === "USER_NOT_FOUND") {

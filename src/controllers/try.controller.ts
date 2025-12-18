@@ -12,7 +12,7 @@ export const sendTryMessage = async (req: Request, res: Response) => {
     }
 
     await sendTryEmail({ name, email, age, doneRyth, message });
-
+    logger.warn(`Try message sent successfully from: ${email}`);
     res.status(200).json({ message: 'Mensaje enviado correctamente.' });
   } catch (error) {
     logger.error(`Error sendTryMessage: ${error}`)
