@@ -8,7 +8,7 @@ import logger from "../config/logger";
 export const getAllUsersController = async (req: Request, res: Response) => {
     try {
         const users = await getAllUsers();
-        logger.warn(`Fetched all users successfully`);
+        logger.info(`Fetched all users successfully`);
         res.status(200).json(users);
     } catch (error) {
         logger.error(`Error getAllUsersController: ${error}`)
@@ -22,7 +22,7 @@ export const getAllUsersController = async (req: Request, res: Response) => {
 export const getAdminsController = async (req: Request, res: Response) => {
   try {
     const admins = await getAdmins();
-    logger.warn(`Fetched all admins successfully`);
+    logger.info(`Fetched all admins successfully`);
     res.status(200).json(admins);
   } catch (error) {
     logger.error(`Error getAdminsController: ${error}`);
@@ -36,7 +36,7 @@ export const getAdminsController = async (req: Request, res: Response) => {
 export const getUsersController = async (req: Request, res: Response) => {
   try {
     const users = await getUsers();
-    logger.warn(`Fetched all users successfully`);
+    logger.info(`Fetched all users successfully`);
     res.status(200).json(users);
   } catch (error) {
     logger.error(`Error getUsersController: ${error}`);
@@ -50,7 +50,7 @@ export const getUsersController = async (req: Request, res: Response) => {
 export const getGimnastsController = async (req: Request, res: Response) => {
   try {
     const gimnasts = await getGimnasts();
-    logger.warn(`Fetched all gimnasts successfully`);
+    logger.info(`Fetched all gimnasts successfully`);
     res.status(200).json(gimnasts);
   } catch (error) {
     logger.error(`Error getGimnastsController: ${error}`);
@@ -71,7 +71,7 @@ export const getUserByIdController = async (req: Request, res: Response) => {
             res.status(404).json({ message: "User not found" });
             return;
         }
-        logger.warn(`Fetched user successfully: ID ${id}`);
+        logger.info(`Fetched user successfully: ID ${id}`);
         res.status(200).json(user);
     } catch (error) {
         logger.error(`Error getUserByIdController: ${error}`)
@@ -149,7 +149,7 @@ export const deleteUserByIdController = async (req: Request, res: Response) => {
 export const getUsersCountByRoleController = async (req: Request, res: Response) => {
     try {
         const counts = await getUsersCountByRole();
-        logger.warn(`Fetched users count by role successfully`);
+        logger.info(`Fetched users count by role successfully`);
         res.status(200).json(counts);
     } catch (error) {
         logger.error(`Error getUsersCountByRoleController: ${error}`);
