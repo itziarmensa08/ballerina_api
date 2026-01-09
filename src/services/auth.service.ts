@@ -55,12 +55,12 @@ export const registerUserService = async (userData: CreateUserDTO): Promise<IUse
     html = html
         .replace(/{{validationLink}}/g, validationLink);
 
-    await transporter.sendMail({
+    /* await transporter.sendMail({
         from: process.env.SMTP_FROM,
         to: email,
         subject: `Validació del compte`,
         html
-    });
+    }); */
 
     if (newUser.roles?.includes('gimnast')) {
         const templateFilename = `gimnast-register-template.html`;

@@ -6,7 +6,8 @@ const ParentInfoSchema = new Schema(
     {
         name: { type: String },
         surname: { type: String },
-        telephone: { type: String }
+        telephone: { type: String },
+        dni: { type: String }
     },
     { _id: false }
 );

@@ -25,6 +25,7 @@ export interface ParentInfo {
     name: string;
     surname: string;
     telephone?: string;
+    dni?: string;
 }
 
 export interface BancInfo {
